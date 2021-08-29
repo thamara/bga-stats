@@ -1,0 +1,17 @@
+venv/*
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
+
+# Django #
+bgastatistics/*.log
+bgastatistics/*.pot
+bgastatistics/*.pyc
+bgastatistics/__pycache__
+bgastatistics/db.sqlite3
+bgastatistics/media
