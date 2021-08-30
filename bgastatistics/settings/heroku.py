@@ -1,6 +1,6 @@
 import environ
 
-from bgastatistics.bgastatistics.settings.base import *
+from bgastatistics.settings.base import *
 
 env = environ.Env()
 
