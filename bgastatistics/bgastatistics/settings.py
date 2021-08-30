@@ -54,7 +54,7 @@ ROOT_URLCONF = 'bgastatistics.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['stats/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

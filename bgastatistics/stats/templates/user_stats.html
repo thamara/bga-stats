@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Board Game Arena Statistics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.0/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+
+    <style>
+        /* colors: 9b5de5 purple, 
+                   f15bb5 pink, 
+                   fee440 yellow, 
+                   00bbf9 blue, 
+                   00f5d4 aqua, 
+                   2b2d42 black-ish
+         */
+        .card {
+            border: none;
+        }
+
+        .card-header {
+            background-color: #00000000;
+            border-bottom: 2px solid #9b5de5;
+        }
+
+        .calendar-heatmap {
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .calendar-heatmap .item {
+            cursor: pointer;
+        }
+
+        .calendar-heatmap .label {
+            cursor: pointer;
+            fill: rgb(24, 24, 24);
+            font-family: Helvetica, arial, 'Open Sans', sans-serif;
+        }
+
+        .calendar-heatmap .button {
+            cursor: pointer;
+            fill: transparent;
+            stroke-width: 2;
+            stroke: rgb(24, 24, 24);
+        }
+
+        .calendar-heatmap .button text {
+            stroke-width: 1;
+            text-anchor: middle;
+            fill: rgb(24, 24, 24);
+        }
+
+        .calendar-heatmap .heatmap-tooltip {
+            pointer-events: none;
+            position: absolute;
+            z-index: 9999;
+            width: 250px;
+            max-width: 250px;
+            overflow: hidden;
+            padding: 15px;
+            font-size: 12px;
+            line-height: 14px;
+            color: rgb(51, 51, 51);
+            font-family: Helvetica, arial, 'Open Sans', sans-serif;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .calendar-heatmap .heatmap-tooltip .header strong {
+            display: inline-block;
+            width: 250px;
+        }
+
+        .calendar-heatmap .heatmap-tooltip span {
+            display: inline-block;
+            width: 50%;
+            padding-right: 10px;
+            box-sizing: border-box;
+        }
+
+        .calendar-heatmap .heatmap-tooltip span,
+        .calendar-heatmap .heatmap-tooltip .header strong {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .word-cloud {
+            display: block;
+            margin: auto;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('#games-played-table').DataTable({ "order": [[4, "desc"]] });
+        });
+    </script>
+
+</head>
+
+<body>
+    <div class="container pb-5">
+        <div class="row">
+            <h1 class="display-4 d-flex justify-content-center">Board Game Arena Statistics</h1>
+        </div>
+    </div>
+    <div class="container col-lg-12 col-md-12 mb-12">
+        <div class="card-deck mb-3 text-center row">
+            <div class="card mb-4 col-lg-4 col-md-12">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Number of games</h4>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title pricing-card-title">{{ stats.number_of_games }}</h3>
+                </div>
+            </div>
+            <div class="card mb-4 col-lg-4 col-md-12">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Different games played</h4>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title pricing-card-title">{{ stats.different_games_count }}</h3>
+                </div>
+            </div>
+            <div class="card mb-4 col-lg-4 col-md-12">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Total time played</h4>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title pricing-card-title">{{ stats.total_time_played }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-3">
+        <table id="games-played-table" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Table ID</th>
+                    <th>Game Name</th>
+                    <th>Game ID</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in stats.games %}
+                <tr>
+                    <td>{{item.table_id}}</td>
+                    <td>{{item.pretty_game_name}}</td>
+                    <td>{{item.game_id}}</td>
+                    <td>{{item.start}}</td>
+                    <td>{{item.end}}</td>
+                    <td>{{item.duration}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
