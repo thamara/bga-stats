@@ -12,32 +12,40 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        button .full-width {
+            width: 100%;
+            display:block
+        }
+    </style>
+
 </head>
 <body>
 
     <div class="container pb-5 pt-2">
         <div class="row">
-            <h1 class="display-4 d-flex justify-content-center">Board Game Arena Statistics</h1>
+            <h1 class="display-2 d-flex justify-content-center">Board Game Arena Statistics</h1>
         </div>
     </div>
 
     <div class="container col-lg-12 col-md-12">
+        <div class="row">
+            <div class="mb-5 d-flex justify-content-center">
+                <p>You should be logged in <a href="https://boardgamearena.com/">BGA</a> from the same browser you are accessing this site.</p>
+            </div>
+        </div>
         <form method="POST" action="{% url 'user_stats' %}">{% csrf_token %}
-            <div class="row">
+            <div class="row d-flex justify-content-center">
                 <div class="mb-3 col-lg-4">
-                    <label for="email" class="form-label">Email address</label>
-                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" required>
-                    <div id="emailHelp" class="form-text">We need your email and password to access BGA.</div>
+                    <div class="row mb-3">
+                        <label for="player-id" class="form-label">Player ID</label>
+                        <input type="text" class="form-control" name="player-id" id="player-id" required>
+                    </div>
+                    <div class="row mb-3">
+                        <button type="submit" class="btn btn-block btn-primary">Get my Statistics!</button>
+                    </div>
                 </div>
-                <div class="mb-3 col-lg-4">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
-                </div>
-                <div class="mb-3 col-lg-4">
-                    <label for="player-id" class="form-label">Player ID</label>
-                    <input type="text" class="form-control" name="player-id" id="player-id" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Get my Statistics!</button>
             </div>
         </form>
     </div>

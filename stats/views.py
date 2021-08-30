@@ -11,6 +11,7 @@ def retrieve_games(email, password, player_id, max_pages=2):
     with requests.session() as c:
         url_login = "http://en.boardgamearena.com/account/account/login.html"
         prm_login = {'email': email, 'password': password, 'rememberme': 'on', 'redirect': 'join', 'form_id': 'loginform'}
+        # This is here just to validate that user is logged in
         r = c.post(url_login, params = prm_login)
         if r.status_code != 200:
             raise Exception("Could not login. Please check your email and password.")
@@ -36,12 +37,10 @@ def index(request):
 
 def user_stats(request):
     if request.method == "POST":
-        email = request.POST.get('email')
-        password = request.POST.get('password')
         player_id = request.POST.get('player-id')
 
         try:
-            games = retrieve_games(email, password, player_id)
+            games = retrieve_games('dummy_email', 'dummy_password', player_id)
             stats = Stats(games)
             context = {
                 'stats': stats,
