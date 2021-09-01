@@ -6,7 +6,7 @@ from .stats import Stats
 import requests
 import json
 
-def retrieve_games(email, password, player_id, max_pages=2):
+def retrieve_games(email, password, player_id, max_pages=100):
     games = []
     with requests.session() as c:
         url_login = "http://en.boardgamearena.com/account/account/login.html"
