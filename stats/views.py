@@ -44,6 +44,7 @@ def user_stats(request):
             stats = Stats(games)
             context = {
                 'stats': stats,
+                'heatmap_data': stats.get_games_by_date(),
             }
             return render(request, 'user_stats.html', context)
         except Exception as e:

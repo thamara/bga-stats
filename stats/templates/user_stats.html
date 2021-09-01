@@ -146,6 +146,22 @@
         </div>
     </div>
 
+    {% include 'heatmap.html' %}
+    <div id="heatmap-placeholder" class="mb-5"></div>
+    <script>
+        // Set custom color for the calendar heatmap
+        var color = '#9b5de5';
+        // Set overview type (choices are year, month and day)
+        var overview = 'year';
+        // Handler function
+        var print = function (val) {
+            console.log(val);
+        };
+        // Initialize calendar heatmap
+        const data = {{ heatmap_data | safe }};
+        calendarHeatmap.init(data, color, overview, print);
+    </script>
+
     <div class="container mb-3">
         <table id="games-played-table" class="table table-striped table-bordered" style="width:100%">
             <thead>
