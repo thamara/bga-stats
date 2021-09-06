@@ -3,7 +3,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import make_aware
 
-from .models import Game, PlayerDetailsModel, GamesByPlayerModel, GameModel
+from .models import PlayerDetailsModel, GamesByPlayerModel, GameModel
 from .stats import Stats
 from .prettifier import get_pretty_name
 
