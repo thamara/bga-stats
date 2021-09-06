@@ -3,7 +3,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import make_aware
 
-from .models import PlayerDetailsModel, GamesByPlayerModel, GameModel
+from .models import PlayerModel, GameModel
 from .stats import Stats
 from .prettifier import get_pretty_name
 
@@ -23,7 +23,8 @@ def process_game(game_info, player):
     end = make_aware(datetime.utcfromtimestamp(int(game_info['end'])))
     elo_penalty = int(game_info['elo_after']) if 'elo_after' in game_info else 0
     elo_after = int(game_info['elo_after']) if 'elo_after' in game_info else 0
-    game = GameModel(id=game_info['table_id'], 
+    game = GameModel(player=player,
+                     table_id=game_info['table_id'], 
                      game_name=game_info['game_name'],
                      pretty_game_name=get_pretty_name(game_info['game_name']),
                      game_id=game_info['game_id'],
@@ -40,18 +41,9 @@ def process_game(game_info, player):
                      player_names=game_info['player_names'],
                      scores=game_info['scores'],
                      ranks=game_info['ranks'])
-    game.save()
-
-    already_loaded_game = GamesByPlayerModel.objects.all().filter(player_id=player.id, game_id=game.id)
-    
-    if already_loaded_game.count() == 0 and player:
-        # Link game to player
-        game_by_player = GamesByPlayerModel(player=player, game=game)
-        game_by_player.save()
-    
     return game
 
-def retrieve_games(email, password, player_id:int, max_pages=100):
+def retrieve_games(email, password, player_id:int, max_pages=2):
     with requests.session() as c:
         url_login = "http://en.boardgamearena.com/account/account/login.html"
         prm_login = {'email': email, 'password': password, 'rememberme': 'on', 'redirect': 'join', 'form_id': 'loginform'}
@@ -64,7 +56,8 @@ def retrieve_games(email, password, player_id:int, max_pages=100):
         params = {'opponent_id': 0, 'finished': 1, 'updateStats': 0, 'page': 1}
 
          ## Get last known Game id as we stop processing when we hit that
-        last_table_in_db = GamesByPlayerModel.objects.all().filter(player_id=player_id).order_by('-game_id').first()
+        last_table_in_db = GameModel.objects.all().filter(player=player_id).order_by('-table_id').first()
+        print(last_table_in_db)
         player = None
         stop_processing = False
         for page in range(1, max_pages):
@@ -84,17 +77,18 @@ def retrieve_games(email, password, player_id:int, max_pages=100):
             # from the player_names array
             if player is None:
                 player_name = get_player_name_from_table_info(player_id, results[0])
-                player = PlayerDetailsModel(id=player_id, name=player_name)
+                player = PlayerModel(id=player_id, name=player_name)
                 player.save()
             
             for i in results:
-                table_id_processed = process_game(i, player)
-                stop_processing = last_table_in_db is not None and int(table_id_processed.id) == int(last_table_in_db.game.id)
+                game = process_game(i, player)
+                stop_processing = last_table_in_db is not None and int(game.table_id) == int(last_table_in_db.table_id)
                 if stop_processing:
-                    print(f'Stop processign as table {table_id_processed} is in db for this player')
+                    print(f'Stop processign as table {game} is in db for this player')
                     break
+                game.save()
     
-    return [x.game for x in GamesByPlayerModel.objects.all().filter(player_id=player_id)]
+    return GameModel.objects.all().filter(player_id=player_id)
 
 def index(request):
     return render(request, 'index.html')

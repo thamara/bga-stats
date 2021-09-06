@@ -3,5 +3,4 @@ from django.contrib import admin
 from .models import *
 
 admin.site.register(GameModel)
-admin.site.register(GamesByPlayerModel)
-admin.site.register(PlayerDetailsModel)
+admin.site.register(PlayerModel)

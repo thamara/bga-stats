@@ -5,8 +5,17 @@ from .prettifier import get_pretty_name
 
 from django.db import models
 
-class GameModel(models.Model):
+class PlayerModel(models.Model):
     id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=300)
+
+    def __str__(self):
+        return f'{self.name} ({self.id})' 
+
+class GameModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    player = models.ForeignKey('PlayerModel', on_delete=models.CASCADE, related_name='current_player', null=True, blank=True)
+    table_id = models.IntegerField(default=0)
     game_name = models.CharField(max_length=300)
     pretty_game_name = models.CharField(max_length=300)
     game_id = models.IntegerField(default=0)
@@ -30,20 +39,4 @@ class GameModel(models.Model):
     ranks = models.CharField(max_length=500)
 
     def __str__(self):
-        return f'{self.pretty_game_name} ({self.id})' 
-
-class PlayerDetailsModel(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=300)
-
-    def __str__(self):
-        return f'{self.name} ({self.id})' 
-
-class GamesByPlayerModel(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    # player_id = models.IntegerField(default=0)
-    player = models.ForeignKey(PlayerDetailsModel, on_delete=models.CASCADE, default=None)
-    game = models.ForeignKey(GameModel, on_delete=models.CASCADE, default=None)
-
-    def __str__(self):
-        return f'{self.player.name} -> {self.game.pretty_game_name} ({self.id})'
+        return f'{self.player.name} -> {self.pretty_game_name} ({self.table_id})' 
