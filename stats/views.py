@@ -43,7 +43,7 @@ def process_game(game_info, player):
                      ranks=game_info['ranks'])
     return game
 
-def retrieve_games(email, password, player_id:int, max_pages=2):
+def retrieve_games(email, password, player_id:int, max_pages=100):
     with requests.session() as c:
         url_login = "http://en.boardgamearena.com/account/account/login.html"
         prm_login = {'email': email, 'password': password, 'rememberme': 'on', 'redirect': 'join', 'form_id': 'loginform'}
@@ -57,7 +57,6 @@ def retrieve_games(email, password, player_id:int, max_pages=2):
 
          ## Get last known Game id as we stop processing when we hit that
         last_table_in_db = GameModel.objects.all().filter(player=player_id).order_by('-table_id').first()
-        print(last_table_in_db)
         player = None
         stop_processing = False
         for page in range(1, max_pages):
