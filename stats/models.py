@@ -38,5 +38,17 @@ class GameModel(models.Model):
     scores = models.CharField(max_length=500)
     ranks = models.CharField(max_length=500)
 
+    def players_as_list(self):
+        return self.players.split(',')
+
+    def player_names_as_list(self):
+        return self.player_names.split(',')
+
+    def scores_as_list(self):
+        return self.scores.split(',')
+
+    def ranks_as_list(self):
+        return self.ranks.split(',')
+
     def __str__(self):
         return f'{self.player.name} -> {self.pretty_game_name} ({self.table_id})' 

@@ -33,43 +33,7 @@
         <h1 class="display-4 d-flex justify-content-center">{{game.table_id}}</h1>
     </div>
 
-    <div class="container mb-3">
-        {% csrf_token %}
-        <table id="games-played-table" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Table ID</th>
-                    <th>Game Name</th>
-                    <th>Game ID</th>
-                    <th>Start</th>
-                    <th>End</th>
-                    <th>Duration</th>
-                    <th>normalend</th>
-                    <th>concede</th>
-                    <th>unranked</th>
-                    <th>elo_win</th>
-                    <th>elo_penalty</th>
-                    <th>elo_after</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{game.id}}</td>
-                    <td>{{game.pretty_game_name}}</td>
-                    <td>{{game.game_id}}</td>
-                    <td>{{game.start}}</td>
-                    <td>{{game.end}}</td>
-                    <td>{{game.duration}}</td>
-                    <td>{{game.normalend}}</td>
-                    <td>{{game.concede}}</td>
-                    <td>{{game.unranked}}</td>
-                    <td>{{game.elo_win}}</td>
-                    <td>{{game.elo_penalty}}</td>
-                    <td>{{game.elo_after}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    {% include 'games_table.html' %}
 
 </body>
 </html>

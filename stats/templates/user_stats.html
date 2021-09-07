@@ -103,12 +103,6 @@
             margin: auto;
         }
     </style>
-    <script>
-        $(document).ready(function() {
-            $('#games-played-table').DataTable({ "order": [[4, "desc"]] });
-        });
-    </script>
-
 </head>
 
 <body>
@@ -162,33 +156,7 @@
         calendarHeatmap.init(data, color, overview, print);
     </script>
 
-    <div class="container mb-3">
-        {% csrf_token %}
-        <table id="games-played-table" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Table ID</th>
-                    <th>Game Name</th>
-                    <th>Game ID</th>
-                    <th>Start</th>
-                    <th>End</th>
-                    <th>Duration</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in stats.games %}
-                <tr>
-                    <td><a href="{% url 'table_detail' item.player.id item.table_id %}">{{item.table_id}}</a></td>
-                    <td><a href="{% url 'game_detail' item.player.id item.game_name %}">{{item.pretty_game_name}}</a></td>
-                    <td>{{item.game_id}}</td>
-                    <td>{{item.start}}</td>
-                    <td>{{item.end}}</td>
-                    <td>{{item.duration}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% include 'games_table.html' %}
 </body>
 
 </html>

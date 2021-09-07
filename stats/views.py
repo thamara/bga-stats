@@ -107,6 +107,8 @@ def user_stats(request, player_id):
         stats = Stats(games)
         context = {
             'stats': stats,
+            'games': games,
+            'player_id': player_id,
             'heatmap_data': stats.get_games_by_date(),
         }
         return render(request, 'user_stats.html', context)
@@ -119,6 +121,7 @@ def game_detail(request, player_id, game):
         games = GameModel.objects.all().filter(player_id=player_id, game_name=game)
         context = {
             'games': games,
+            'player_id': player_id,
         }
         return render(request, 'game_detail.html', context)
     except Exception as e:
@@ -129,7 +132,8 @@ def table_detail(request, player_id, table):
     try:
         game = GameModel.objects.all().get(player_id=player_id, table_id=table)
         context = {
-            'game': game,
+            'games': [game],
+            'player_id': player_id,
         }
         return render(request, 'table_detail.html', context)
     except Exception as e:
