@@ -163,6 +163,7 @@
     </script>
 
     <div class="container mb-3">
+        {% csrf_token %}
         <table id="games-played-table" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
@@ -178,7 +179,7 @@
                 {% for item in stats.games %}
                 <tr>
                     <td>{{item.id}}</td>
-                    <td>{{item.pretty_game_name}}</td>
+                    <td><a href="{% url 'game_detail' item.player.id item.game_name %}">{{item.pretty_game_name}}</a></td>
                     <td>{{item.game_id}}</td>
                     <td>{{item.start}}</td>
                     <td>{{item.end}}</td>

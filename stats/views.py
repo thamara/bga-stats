@@ -113,3 +113,16 @@ def user_stats(request, player_id):
     except Exception as e:
         print(f'Got exception {e}')
         raise Http404(e)
+
+def game_detail(request, player_id, game):
+    print(game)
+    print(player_id)
+    try:
+        games = GameModel.objects.all().filter(player_id=player_id, game_name=game)
+        context = {
+            'games': games,
+        }
+        return render(request, 'game_detail.html', context)
+    except Exception as e:
+        print(f'Got exception {e}')
+        raise Http404(e)
