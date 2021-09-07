@@ -92,20 +92,24 @@ def retrieve_games(email, password, player_id:int, max_pages=100):
 def index(request):
     return render(request, 'index.html')
 
-def user_stats(request):
+def user_stats_post(request):
     if request.method == "POST":
         player_id = request.POST.get('player-id')
+        return user_stats(request, player_id)
 
-        try:
-            games = retrieve_games('dummy_email', 'dummy_password', int(player_id))
-            stats = Stats(games)
-            context = {
-                'stats': stats,
-                'heatmap_data': stats.get_games_by_date(),
-            }
-            return render(request, 'user_stats.html', context)
-        except Exception as e:
-            print(f'Got exception {e}')
-            raise Http404(e)
-    print('No request POST')
-    raise Http404("Something went wrong. :(")
+def user_stats(request, player_id):
+    print(player_id)
+    if request.method == "POST":
+        player_id = request.POST.get('player-id') if not player_id else player_id
+
+    try:
+        games = retrieve_games('dummy_email', 'dummy_password', int(player_id))
+        stats = Stats(games)
+        context = {
+            'stats': stats,
+            'heatmap_data': stats.get_games_by_date(),
+        }
+        return render(request, 'user_stats.html', context)
+    except Exception as e:
+        print(f'Got exception {e}')
+        raise Http404(e)

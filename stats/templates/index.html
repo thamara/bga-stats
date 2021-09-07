@@ -35,7 +35,7 @@
                 <p>You should be logged in <a href="https://boardgamearena.com/">BGA</a> from the same browser you are accessing this site.</p>
             </div>
         </div>
-        <form method="POST" action="{% url 'user_stats' %}">{% csrf_token %}
+        <form method="POST" action="{% url 'user_stats_post' %}">{% csrf_token %}
             <div class="row d-flex justify-content-center">
                 <div class="mb-3 col-lg-4">
                     <div class="row mb-3">
