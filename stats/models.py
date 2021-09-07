@@ -49,6 +49,11 @@ class GameModel(models.Model):
 
     def ranks_as_list(self):
         return self.ranks.split(',')
+    
+    def final_elo(self):
+        # For some reason, BGA stored initial ELO (0) as 1300
+        # So we need some math to get the final visible ELO
+        return (self.elo_after - 1300)
 
     def __str__(self):
         return f'{self.player.name} -> {self.pretty_game_name} ({self.table_id})' 

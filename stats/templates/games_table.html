@@ -10,7 +10,7 @@
         table.column(7/*Concede*/).visible(false);
         table.column(8/*Unranked*/).visible(false);
         table.column(10/*Elo Penalty*/).visible(false);
-        table.column(12/*Playersy*/).visible(false);
+        table.column(13/*Playersy*/).visible(false);
         
         $('a.toggle-vis').on('click', function (e) {
             e.preventDefault();
@@ -37,10 +37,11 @@
                        <a class="toggle-vis" data-column="9">Elo Win</a> -
                        <a class="toggle-vis" data-column="10">Elo Penalty</a> -
                        <a class="toggle-vis" data-column="11">Elo After</a> -
-                       <a class="toggle-vis" data-column="12">Players</a> -
-                       <a class="toggle-vis" data-column="13">Player names</a> -
-                       <a class="toggle-vis" data-column="14">Scores</a> -
-                       <a class="toggle-vis" data-column="15">Ranks</a>
+                       <a class="toggle-vis" data-column="12">Final ELO</a> -
+                       <a class="toggle-vis" data-column="13">Players</a> -
+                       <a class="toggle-vis" data-column="14">Player names</a> -
+                       <a class="toggle-vis" data-column="15">Scores</a> -
+                       <a class="toggle-vis" data-column="16">Ranks</a>
     </div>
     <table id="games-played-table" class="table table-striped table-bordered" style="width:100%">
         <thead>
@@ -57,6 +58,7 @@
                 <th>Elo Win</th>
                 <th>Elo Penalty</th>
                 <th>Elo After</th>
+                <th>Final Elo</th>
                 <th>Players</th>
                 <th>Player names</th>
                 <th>Scores</th>
@@ -78,6 +80,7 @@
                 <td>{{item.elo_win}}</td>
                 <td>{{item.elo_penalty}}</td>
                 <td>{{item.elo_after}}</td>
+                <td>{{item.final_elo}}</td>
                 <td>{{item.players_as_list|join:'<br>'}}</td>
                 <td>{{item.player_names_as_list|join:'<br>'}}</td>
                 <td>{{item.scores_as_list|join:'<br>'}}</td>
