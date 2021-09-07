@@ -178,7 +178,7 @@
             <tbody>
                 {% for item in stats.games %}
                 <tr>
-                    <td>{{item.id}}</td>
+                    <td><a href="{% url 'table_detail' item.player.id item.table_id %}">{{item.table_id}}</a></td>
                     <td><a href="{% url 'game_detail' item.player.id item.game_name %}">{{item.pretty_game_name}}</a></td>
                     <td>{{item.game_id}}</td>
                     <td>{{item.start}}</td>
