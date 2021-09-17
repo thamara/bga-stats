@@ -1,6 +1,9 @@
 from collections import defaultdict
 import datetime
 
+def is_turn_based(game):
+    return game.duration >= datetime.timedelta(hours=8)
+
 class Stats():
     def __init__(self, games) -> None:
         self.games = games
@@ -18,7 +21,9 @@ class Stats():
     def __update_stats(self, game):
         self.different_games.add(game.game_name)
         self.different_games_count = len(self.different_games)
-        self.total_time_played += game.duration
+        # Do not count games that are more than 8h long as those most likely are turn-based games
+        if not is_turn_based(game):
+            self.total_time_played += game.duration
         self.total_time_by_date[game.start.date().strftime('%Y-%m-%d')] += game.duration
         self.total_time_by_game[game.pretty_game_name] += game.duration
         # self.total_time_by_date[game.start.timestamp()] += game.duration
