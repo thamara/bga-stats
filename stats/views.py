@@ -1,13 +1,13 @@
 from django.http import Http404
 from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, now
 
 from .models import PlayerModel, GameModel
 from .stats import Stats
 from .prettifier import get_pretty_name
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import requests
 
@@ -109,6 +109,9 @@ def user_stats(request, player_id):
             'stats': stats,
             'games': games,
             'player_id': player_id,
+            'count_games_90d': len(games.filter(end__gte=now() - timedelta(days=90))),
+            'count_games_30d': len(games.filter(end__gte=now() - timedelta(days=30))),
+            'count_games_7d': len(games.filter(end__gte=now() - timedelta(days=7))),
             'heatmap_data': stats.get_games_by_date(),
         }
         return render(request, 'user_stats.html', context)

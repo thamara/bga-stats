@@ -136,6 +136,34 @@
                 </div>
             </div>
         </div>
+        <div class="container col-lg-12 col-md-12 mb-12">
+            <div class="card-deck mb-3 text-center row">
+                <div class="card mb-4 col-lg-4 col-md-12">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Games in the last 90d</h4>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title pricing-card-title">{{ count_games_90d }}</h3>
+                    </div>
+                </div>
+                <div class="card mb-4 col-lg-4 col-md-12">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Games in the last 30d</h4>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title pricing-card-title">{{ count_games_30d }}</h3>
+                    </div>
+                </div>
+                <div class="card mb-4 col-lg-4 col-md-12">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Games in the last 7d</h4>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title pricing-card-title">{{ count_games_7d }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     {% include 'heatmap.html' %}
